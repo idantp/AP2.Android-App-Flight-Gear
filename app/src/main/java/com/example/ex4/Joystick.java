@@ -17,11 +17,15 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Joystick extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
 
     private JoystickListener joystickListener;
+    //small circle radius.
     private float smallRadius;
+    //bigger radius.
     private float bigRadius;
+    //center point.
     private float xAxisCenter;
     private float yAxisCenter;
 
+    //CCTOR
     public Joystick(Context context) {
         super(context);
         // surface will notify this joystick once is created/changed/destroyed
@@ -32,6 +36,7 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
         }
     }
 
+    //CCTOR
     public Joystick(Context context, AttributeSet attrs) {
         super(context, attrs);
         getHolder().addCallback(this);
@@ -41,6 +46,7 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
         }
     }
 
+    //CCTOR
     public Joystick(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         getHolder().addCallback(this);
@@ -52,6 +58,7 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        //once created, set the dimensions and draw the joystick.
         initializeDimensions();
         draw(this.xAxisCenter, this.yAxisCenter);
     }
@@ -66,7 +73,7 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
 
     }
 
-    //todo - CHange the ratios.
+    //Initializes the dimensions of the joystick.
     private void initializeDimensions() {
         this.bigRadius = (float) Math.min(getWidth(), getHeight()) / 3;
         this.smallRadius = (float) Math.min(getWidth(), getHeight()) / 7;
@@ -74,6 +81,11 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
         this.yAxisCenter = (float) getHeight() / 2;
     }
 
+    /**
+     * Draws the joystick to the screen.
+     * @param x - Where the center x axis is
+     * @param y - where the center y axis is.
+     */
     private void draw(float x, float y) {
         if (getHolder().getSurface().isValid()) {
             Canvas canvas = this.getHolder().lockCanvas();
@@ -98,12 +110,13 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
             if (motionEvent.getAction() != motionEvent.ACTION_UP) {
                 joystickPlacement = (float) Math.sqrt((Math.pow(motionEvent.getX() -
                         this.xAxisCenter, 2)) + Math.pow(motionEvent.getY() - this.yAxisCenter, 2));
+                //it is inside of the big circle or on it's perimeter.
                 if (joystickPlacement < this.bigRadius) {
                     draw(motionEvent.getX(), motionEvent.getY());
                     joystickListener.onJoystickMoved(
                             (motionEvent.getX() - xAxisCenter) / bigRadius,
                             (motionEvent.getY() - yAxisCenter) / bigRadius);
-
+                //attempted to exit the perimeter of the big circle.
                 } else {
                     float distanceRatio = bigRadius / joystickPlacement;
                     float fixedX = this.xAxisCenter +
@@ -126,6 +139,7 @@ public class Joystick extends SurfaceView implements SurfaceHolder.Callback, Vie
         return true;
     }
 
+    //Listener interface.
     public interface JoystickListener {
         void onJoystickMoved(float xPercent, float yPercent);
     }

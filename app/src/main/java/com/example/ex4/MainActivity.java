@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         Intent intent = new Intent(this, JoystickActivity.class);
+        //get the ip and the port number from the xml and send it to the next activity for use.
         intent.putExtra("port", ((EditText)findViewById(R.id.portText)).getText().toString());
         intent.putExtra("ip", ((EditText)findViewById(R.id.IpText)).getText().toString());
         startActivity(intent);
