@@ -28,7 +28,6 @@ public class ClientConnect {
         try {
             this.ipAddress = InetAddress.getByName(ipAddress);
         } catch(Exception e){
-            //todo - error message
         }
     }
 
@@ -40,7 +39,6 @@ public class ClientConnect {
                     printWriter.println(data);
                     printWriter.flush();
                 } catch(Exception e){
-                    //todo - error
                 }
             }
         };
@@ -58,9 +56,6 @@ public class ClientConnect {
                     isConnected = true;
 
                 } catch(Exception e){
-                    System.out.println(e.toString());
-                    //todo - error message
-
                 }
             }
         };
@@ -74,8 +69,6 @@ public class ClientConnect {
             try{
                 socket.close();
             } catch(Exception e){
-                //todo - error.
-
             }
         }
     }
